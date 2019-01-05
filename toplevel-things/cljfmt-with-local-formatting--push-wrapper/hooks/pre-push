@@ -1,0 +1,9 @@
+#!/bin/bash
+
+stdin=$(cat);
+
+if [ ! -z "${stdin}" ]
+then
+    >&2 echo 'ERROR: Instead of `git push`, use the `nomis-cljfmt-with-local-formatting--push-wrapper--git-push` wrapper script so that cljfmt formatting is applied. See the docs.'
+    exit 1
+fi

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+"exec" "plk" "-Sdeps" "{:paths [\"${HOME}/nomis-git-stuff/src/cljs\"] :deps {com.andrewmcveigh/cljs-time {:mvn/version \"0.5.2\"}}}" "$0" "$@"
+
+(ns bash-sript-for-nomis-git-stuff.cljfmt-with-local-formatting--push-wrapper.push-wrapper
+  (:require [nomis-git-stuff.cljfmt-with-local-formatting--push-wrapper.push-wrapper :as push-wrapper]))
+
+(push-wrapper/push-wrapper)
