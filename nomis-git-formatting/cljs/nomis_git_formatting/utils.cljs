@@ -1,4 +1,4 @@
-(ns nomis-git-stuff.common.utils
+(ns nomis-git-formatting.utils
   (:require [clojure.string :as str]
             [cljs-time.core :as time]
             [cljs-time.format :as tf]

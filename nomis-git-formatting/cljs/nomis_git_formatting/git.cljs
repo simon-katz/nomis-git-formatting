@@ -1,8 +1,8 @@
-(ns nomis-git-stuff.common.git
+(ns nomis-git-formatting.git
   (:require [clojure.string :as str]
             [goog.string :as gstring]
             [goog.string.format]
-            [nomis-git-stuff.common.utils :as u]))
+       [nomis-git-formatting.utils :as u]))
 
 (defn branch-name []
   (-> (u/bash "git rev-parse --abbrev-ref HEAD")

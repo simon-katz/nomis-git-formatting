@@ -1,9 +1,9 @@
-(ns nomis-git-stuff.cljfmt-with-local-formatting--push-wrapper.push-wrapper
+(ns nomis-git-formatting.push-wrapper
   (:require [clojure.string :as str]
             [goog.string :as gstring]
             [goog.string.format]
-            [nomis-git-stuff.common.git :as git]
-            [nomis-git-stuff.common.utils :as u]
+            [nomis-git-formatting.git :as git]
+            [nomis-git-formatting.utils :as u]
             [planck.core :as core]
             [planck.io :as io]
             [planck.shell :as shell]))
