@@ -31,23 +31,20 @@
         (git/commit--quiet--no-verify--allow-empty-v2 "-C" sha)))))
 
 (defn checkout [sha]
-  (println "    Checking out")
+  (println "    Checking out" sha)
   (git/checkout-pathspec=dot sha))
 
 (defn push []
   (println "Pushing")
   (git/push "--no-verify"))
 
-(defn set-index-to-as-it-was [user-commit-sha]
-  (git/checkout-pathspec=dot user-commit-sha))
-
 (defn maybe-create-local-formatting-commit [user-commit-sha]
   (when (git/dirty?)
-    (println "Committing: apply-local-formatting")
+    (println "    Committing: apply-local-formatting")
     (git/commit--quiet--no-verify--allow-empty "apply-local-formatting")))
 
 (defn restore-uncommitted-changes [stash-name]
-  (println "Restoring any uncommitted changes")
+  (println "    Restoring any uncommitted changes")
   (git/apply-stash-if-ends-with--not-index stash-name))
 
 (defn push-wrapper []
@@ -81,7 +78,8 @@
               (checkout sha)
               (reformat-and-commit-if-dirty sha false))
             (push)
-            (set-index-to-as-it-was user-commit-sha)
+            (println "Doing post-push processing")
+            (checkout user-commit-sha)
             (maybe-create-local-formatting-commit user-commit-sha)
             (restore-uncommitted-changes stash-name)))))))
 
