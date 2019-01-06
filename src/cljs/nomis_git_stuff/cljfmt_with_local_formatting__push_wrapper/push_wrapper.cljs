@@ -85,3 +85,36 @@
 
 ;;;; TODO What happens when we need to force-push?
 ;;;;      The sequence of commits we get will be empty.
+;;;; TODO What about command-line args?
+;;;;      - Grrr! Would be so much better if you could use pre and post hooks.
+;;;;      - Ah, here's an idea:
+;;;         - But I don't think it worls, because there will be error exits
+;;;;        - Do `git push`
+;;;;          - So you have all the args that `git push` has
+;;;;        - The pre-push hooks calls this script and passes in the parameters.
+;;;;          - This script either
+;;;;            - does no-hooks when calling git push
+;;;;            - creates a special file fir the pre-push hook to see
+;;;;        - This script exits
+;;;;          - Maybe an error exit
+;;;;            - but with a message to the user saying all OK
+;;;;          - Maybe a 0 exit
+;;;;            - But then it will try to push again I guess
+;;;;              - What will be the result of that? An error?
+;;;;          - And an error exit will confuse callers, so not good
+;;;;        - Another idea:
+;;;;          - In this script
+;;;;            - Create a special file
+;;;;            - Call `git push` with all of this scripts args
+;;;;          - In pre-push hook
+;;;;            - Check for the special file
+;;;;            - Get the parameters and store them in a special file
+;;;;            - exit 1 so that the push doesn't happen
+;;;;          - In this script
+;;;;            - Grab the stored parameters
+;;;;            - So now you have the list of commits you need
+;;;;            - After rewriting commits, call git push again
+;;;;          - Q.
+;;;;            - Think about all the possible args to git push.
+;;;;              - You're not going to understand everything.
+;;;;              - Maybe only allow a limited set of args
