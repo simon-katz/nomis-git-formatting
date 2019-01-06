@@ -8,6 +8,72 @@
             [planck.io :as io]
             [planck.shell :as shell]))
 
+(def doing-get-push-parameters-filename
+  ".git/_nomis-git-formatting--doing-get-push-parameters")
+
+(def remote-name-filename     ".git/_nomis-git-formatting--remote-name")
+(def remote-location-filename ".git/_nomis-git-formatting--remote-location")
+(def pre-push-stdin-filename  ".git/_nomis-git-formatting--pre-push-stdin")
+
+(def doing-wrapped-push-filename ".git/_nomis-git-formatting--doing-wrapped-push")
+
+(defn git-pre-push-stdin->push-info [s]
+  (map u/split-on-space
+       (u/split-on-newline s)))
+
+(defn get-push-parameters [command-line-args]
+  ;; TODO We might not be running in the root directory of the repo.
+  ;;      Will need to do `(-> (u/bash "pwd") u/remove-trailing-newline)` and
+  ;;      search upwards for .git. (Or is there a Planck way to get working
+  ;;      directory?)
+  (u/touch doing-get-push-parameters-filename)
+  (try (let [;; TODO Think about problems with passing command line parameters around.
+             res (apply shell/sh "git" "push" command-line-args)]
+         (assert (not (zero? (:exit res))))
+         (print (:out res))
+         ;; Don't print the error output -- it will have an error because the
+         ;; pre-push hook exited with an error.
+         )
+       (finally
+         (io/delete-file doing-get-push-parameters-filename)))
+  (let [remote-name     (-> (core/slurp remote-name-filename)
+                            u/remove-trailing-newline)
+        remote-location (-> (core/slurp remote-location-filename)
+                            u/remove-trailing-newline)
+        pre-push-stdin  (-> (core/slurp pre-push-stdin-filename)
+                            u/remove-trailing-newline)
+        push-info       (git-pre-push-stdin->push-info pre-push-stdin)]
+    [remote-name
+     remote-location
+     push-info]))
+
+(defn ensure-n-things-being-pushed-ok [push-info]
+  (let [n-things-being-pushed (count push-info)]
+    (when (> n-things-being-pushed 1)
+      (u/exit-with-error
+       (gstring/format
+        "Don't know what to do unless a single thing is being pushed. We have %s: %s"
+        n-things-being-pushed
+        push-info)))))
+
+(defn get-push-details [command-line-args]
+  (let [[remote-name
+         remote-location
+         push-info] (get-push-parameters command-line-args)]
+    (println "[wrapper] remote-name ="     remote-name)
+    (println "[wrapper] remote-location =" remote-location)
+    (println "[wrapper] push-info ="       push-info)
+    (ensure-n-things-being-pushed-ok push-info)
+    (let [single-push-item? (= 1 (count push-info))
+          local-sha         (when single-push-item? (-> push-info first second))
+          remote-sha        (when single-push-item? (-> push-info first (nth 3)))]
+      (println "[wrapper] local-sha ="  local-sha)
+      (println "[wrapper] remote-sha =" remote-sha)
+      (println "[wrapper] HEAD ="       (git/->sha "HEAD"))
+      [remote-name
+       local-sha
+       remote-sha])))
+
 (defn stash [stash-name]
   (println "Stashing if dirty")
   (git/stash-if-dirty-include-untracked stash-name))
@@ -30,15 +96,22 @@
         (git/commit--quiet--no-verify--allow-empty "apply-cljfmt-formatting")
         (git/commit--quiet--no-verify--allow-empty-v2 "-C" sha)))))
 
-(defn checkout [sha]
-  (println "    Checking out" sha)
+(defn checkout [sha print-sha?]
+  (if print-sha?
+    (println "    Checking out" sha)
+    (println "    Checking out"))
   (git/checkout-pathspec=dot sha))
 
-(defn push []
-  (println "Pushing")
-  (git/push "--no-verify"))
+(defn push [command-line-args]
+  (u/touch doing-wrapped-push-filename)
+  (try (let [;; TODO Think about problems with passing command line parameters around.
+             res (apply shell/sh "git" "push" command-line-args)]
+         (print (:out res))
+         (u/err-println (:err res)))
+       (finally
+         (io/delete-file doing-wrapped-push-filename))))
 
-(defn maybe-create-local-formatting-commit [user-commit-sha]
+(defn maybe-create-local-formatting-commit []
   (when (git/dirty?)
     (println "    Committing: apply-local-formatting")
     (git/commit--quiet--no-verify--allow-empty "apply-local-formatting")))
@@ -48,73 +121,41 @@
   (git/apply-stash-if-ends-with--not-index stash-name))
 
 (defn push-wrapper []
-  (let [remote-name        (git/remote-name)
-        branch-name        (git/branch-name)
-        ;; TODO Are you are making assumptions about the name of the
-        ;;      remote branch?
-        remote-branch-name (str remote-name "/" branch-name)
-        unpushed-shas      (git/range->shas remote-branch-name "HEAD")
-        n-unpushed-shas    (count unpushed-shas)
-        user-commit-sha    (last unpushed-shas)]
+  (let [command-line-args cljs.core/*command-line-args*
+        _                 (do
+                            (println (str "command-line-args = '"
+                                          command-line-args
+                                          "'"))
+                            (println "(type command-line-args) ="
+                                     (type command-line-args))
+                            (println "Getting push parameters"))
+        [remote-name
+         local-sha
+         remote-sha]      (get-push-details command-line-args)
+        branch-name       (git/branch-name)
+        unpushed-shas     (git/range->shas remote-sha local-sha)
+        n-unpushed-shas   (count unpushed-shas)]
     (println "unpushed-shas   =" unpushed-shas)
-    (println "user-commit-sha =" user-commit-sha)
+    (println "local-sha =" local-sha)
     (when unpushed-shas
-      (let [pushed-sha (git/->sha (str "HEAD~" n-unpushed-shas))]
-        (println "pushed-sha =" pushed-sha)
-        (let [stash-name (git/safekeeping-stash-name
-                          "_nomis-cljfmt-with-local-formatting--push-wrapper"
-                          "push-wrapper"
-                          user-commit-sha)]
-          (do
-            (stash stash-name)
-            (println "Processing remote commit"
-                     remote-branch-name
-                     (git/->sha remote-branch-name)
-                     (git/ref->commit-message remote-branch-name))
-            (reset-to-remote-commit remote-branch-name)
-            (reformat-and-commit-if-dirty pushed-sha true)
-            (doseq [sha unpushed-shas]
-              (println "Processing" sha (git/ref->commit-message sha))
-              (checkout sha)
-              (reformat-and-commit-if-dirty sha false))
-            (push)
-            (println "Doing post-push processing")
-            (checkout user-commit-sha)
-            (maybe-create-local-formatting-commit user-commit-sha)
-            (restore-uncommitted-changes stash-name)))))))
-
-;;;; TODO What happens when we need to force-push?
-;;;;      The sequence of commits we get will be empty.
-;;;; TODO What about command-line args?
-;;;;      - Grrr! Would be so much better if you could use pre and post hooks.
-;;;;      - Ah, here's an idea:
-;;;         - But I don't think it worls, because there will be error exits
-;;;;        - Do `git push`
-;;;;          - So you have all the args that `git push` has
-;;;;        - The pre-push hooks calls this script and passes in the parameters.
-;;;;          - This script either
-;;;;            - does no-hooks when calling git push
-;;;;            - creates a special file fir the pre-push hook to see
-;;;;        - This script exits
-;;;;          - Maybe an error exit
-;;;;            - but with a message to the user saying all OK
-;;;;          - Maybe a 0 exit
-;;;;            - But then it will try to push again I guess
-;;;;              - What will be the result of that? An error?
-;;;;          - And an error exit will confuse callers, so not good
-;;;;        - Another idea:
-;;;;          - In this script
-;;;;            - Create a special file
-;;;;            - Call `git push` with all of this scripts args
-;;;;          - In pre-push hook
-;;;;            - Check for the special file
-;;;;            - Get the parameters and store them in a special file
-;;;;            - exit 1 so that the push doesn't happen
-;;;;          - In this script
-;;;;            - Grab the stored parameters
-;;;;            - So now you have the list of commits you need
-;;;;            - After rewriting commits, call git push again
-;;;;          - Q.
-;;;;            - Think about all the possible args to git push.
-;;;;              - You're not going to understand everything.
-;;;;              - Maybe only allow a limited set of args
+      (let [stash-name (git/safekeeping-stash-name
+                        "_nomis-cljfmt-with-local-formatting--push-wrapper"
+                        "push-wrapper"
+                        local-sha)]
+        (do
+          (stash stash-name)
+          (println "Processing remote commit"
+                   remote-sha
+                   (git/ref->commit-message remote-sha))
+          (reset-to-remote-commit remote-sha)
+          (reformat-and-commit-if-dirty remote-sha true)
+          (doseq [sha unpushed-shas]
+            (println "Processing" sha (git/ref->commit-message sha))
+            (checkout sha false)
+            (reformat-and-commit-if-dirty sha false))
+          (println "Pushing")
+          (push command-line-args)
+          (println "Doing post-push processing")
+          (checkout local-sha true)
+          (maybe-create-local-formatting-commit)
+          (restore-uncommitted-changes stash-name))))))

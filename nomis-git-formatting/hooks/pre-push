@@ -1,9 +1,31 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-stdin=$(cat);
+doing_get_push_parameters_filename='.git/_nomis-git-formatting--doing-get-push-parameters'
+remote_name_filename='.git/_nomis-git-formatting--remote-name'
+remote_location_filename='.git/_nomis-git-formatting--remote-location'
+pre_push_stdin_filename='.git/_nomis-git-formatting--pre-push-stdin'
+doing_wrapped_push_filename='.git/_nomis-git-formatting--doing-wrapped-push'
 
-if [ ! -z "${stdin}" ]
+stdin=$(cat)
+
+if [ -e "${doing_get_push_parameters_filename}" ]
 then
-    >&2 echo 'ERROR: Instead of `git push`, use the `git-push-with-cljfmt-formatting` wrapper script so that cljfmt formatting is applied. See the docs.'
+    # Create files to communicate back to the push wrapper.
+    echo "[pre-push-hook]" "Creating files to communicate back to the push wrapper"
+    echo "[pre-push-hook]" "Working directory = $(pwd)"
+    echo "[pre-push-hook]" "Arg #1 = ${1}"
+    echo "[pre-push-hook]" "Arg #2 = ${2}"
+    echo "[pre-push-hook]" "stdin = [${stdin}]"
+    echo "${1}"     > ${remote_name_filename}
+    echo "${2}"     > ${remote_location_filename}
+    echo "${stdin}" > ${pre_push_stdin_filename}
+    exit 1 # so that no push happens
+elif [ -e "${doing_wrapped_push_filename}" ]
+then
+    # Allow the push to happen
+    echo "[pre-push-hook]" "Allowing push to happen"
+    exit 0
+else
+    >&2 echo 'ERROR: Instead of `git push`, use the `git-push-with-cljfmt-formatting` wrapper script so that cljfmt formatting is applied. See the docs. You may need to run the script when in the root directory of the repo.'
     exit 1
 fi
