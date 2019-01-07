@@ -39,6 +39,17 @@
 ;;;;            - Think about all the possible args to git push.
 ;;;;              - You're not going to understand everything.
 ;;;;              - Maybe only allow a limited set of args
+** TODO Are you formatting all files?
+*** Can you format only some?
+**** Maybe sometimes that's possible
+**** Need to think (and create / add to design notes)
+** TODO Parameterise the formatter
+*** Maybe
+**** would need to parameterise these as well:
+***** whether individual files can be passed to the formatter
+***** file types
+*** As is done at https://stackoverflow.com/questions/31057527/git-pre-commit-hook-to-format-and-re-add-files-at-the-same-time/49265008#49265008
+** TODO Have a separate `format-unpushed-commits` script
 ** TODO You want to rewrite without changing the commit hashes
 *** I think I saw something that lets you update objects in git
 *** Oh, that's not what you had thought
