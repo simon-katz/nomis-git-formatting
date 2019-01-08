@@ -49,7 +49,11 @@
 ***** whether individual files can be passed to the formatter
 ***** file types
 *** As is done at https://stackoverflow.com/questions/31057527/git-pre-commit-hook-to-format-and-re-add-files-at-the-same-time/49265008#49265008
+** TODO At start, print the current sha and the stash name
+*** Also create a script file to reset things
 ** TODO Have a separate `format-unpushed-commits` script
+*** Useful to have as a separate thing
+**** But on push will still have to check all the commits
 ** TODO You want to rewrite without changing the commit hashes
 *** I think I saw something that lets you update objects in git
 *** Oh, that's not what you had thought
