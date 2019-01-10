@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+"exec" "plk" "-Sdeps" "{:paths [\"${HOME}/nomis-git-formatting/cljs\"] :deps {com.andrewmcveigh/cljs-time {:mvn/version \"0.5.2\"}}}" "$0" "$@"
+
+(ns bash-sript-for-nomis-git-formatting.reformat
+  (:require [nomis-git-formatting.reformat :as reformat]))
+
+(reformat/reformat-local)

@@ -4,4 +4,4 @@
 (ns bash-sript-for-nomis-git-formatting.reformat
   (:require [nomis-git-formatting.reformat :as reformat]))
 
-(reformat/push-wrapper)
+(reformat/reformat-and-push)

@@ -120,7 +120,8 @@
   (println "    Restoring any uncommitted changes")
   (git/apply-stash-if-ends-with--not-index stash-name))
 
-(defn push-wrapper []
+(defn reformat [{:keys [push?
+                        type-for-stash]}]
   (let [command-line-args cljs.core/*command-line-args*
         _                 (do
                             (println (str "command-line-args = '"
@@ -144,10 +145,11 @@
     (println "unpushed-shas   =" unpushed-shas)
     (when unpushed-shas
       (let [stash-name (git/safekeeping-stash-name
-                        "_nomis-cljfmt-with-local-formatting"
-                        "reformat"
+                        "_nomis-cljfmt-with-local-formatting--push-wrapper"
+                        type-for-stash
                         local-sha)]
         (do
+          (println "Stashing")
           (stash stash-name)
           (println "Processing remote commit"
                    remote-sha
@@ -158,9 +160,18 @@
             (println "Processing" sha (git/ref->commit-message sha))
             (checkout sha false)
             (reformat-and-commit-if-dirty sha false))
-          (println "Pushing")
-          (push command-line-args)
-          (println "Doing post-push processing")
+          (when push?
+            (println "Pushing")
+            (push command-line-args))
+          (println "Restoring uncommited state")
           (checkout local-sha true)
           (maybe-create-local-formatting-commit)
           (restore-uncommitted-changes stash-name))))))
+
+(defn reformat-and-push []
+  (reformat {:push? true
+             :type-for-stash "reformat-and-push"}))
+
+(defn reformat-local []
+  (reformat {:push? false
+             :type-for-stash "reformat-local"}))
