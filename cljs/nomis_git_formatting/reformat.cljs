@@ -119,7 +119,7 @@
 
 (defn restore-uncommitted-changes [stash-name]
   (println "    Restoring any uncommitted changes")
-  (git/apply-stash-if-ends-with--not-index stash-name))
+  (git/apply-stash-if-ends-with stash-name))
 
 (defn reformat [{:keys [push?
                         type-for-stash]}]
