@@ -133,41 +133,42 @@
                             (println "Getting push parameters"))
         [remote-name
          local-sha
-         remote-sha]      (get-push-details command-line-args)
-        branch-name       (git/branch-name)
-        _                 (do
-                            (println "remote-name =" remote-name)
-                            (println "local-sha =" local-sha)
-                            (println "remote-sha =" remote-sha)
-                            (assert (not (nil? local-sha)))
-                            (assert (not (nil? remote-sha))))
-        unpushed-shas     (git/range->shas remote-sha local-sha)
-        n-unpushed-shas   (count unpushed-shas)]
-    (println "unpushed-shas   =" unpushed-shas)
-    (when unpushed-shas
-      (let [stash-name (git/safekeeping-stash-name
-                        "_nomis-cljfmt-with-local-formatting--push-wrapper"
-                        type-for-stash
-                        local-sha)]
-        (do
-          (println "Stashing")
-          (stash stash-name)
-          (println "Processing remote commit"
-                   remote-sha
-                   (git/ref->commit-message remote-sha))
-          (reset-to-remote-commit remote-sha)
-          (reformat-and-commit-if-dirty remote-sha true)
-          (doseq [sha unpushed-shas]
-            (println "Processing" sha (git/ref->commit-message sha))
-            (checkout sha false)
-            (reformat-and-commit-if-dirty sha false))
-          (when push?
-            (println "Pushing")
-            (push command-line-args))
-          (println "Restoring uncommited state")
-          (checkout local-sha true)
-          (maybe-create-local-formatting-commit)
-          (restore-uncommitted-changes stash-name))))))
+         remote-sha]      (get-push-details command-line-args)]
+    (println "remote-name =" remote-name)
+    (println "local-sha =" local-sha)
+    (println "remote-sha =" remote-sha)
+    (if (or (nil? local-sha)
+            (nil? remote-sha))
+      (do
+        (println "Nothing to do -- exiting"))
+      (let [branch-name     (git/branch-name)
+            unpushed-shas   (git/range->shas remote-sha local-sha)
+            n-unpushed-shas (count unpushed-shas)]
+        (println "unpushed-shas   =" unpushed-shas)
+        (when unpushed-shas
+          (let [stash-name (git/safekeeping-stash-name
+                            "_nomis-cljfmt-with-local-formatting--push-wrapper"
+                            type-for-stash
+                            local-sha)]
+            (do
+              (println "Stashing")
+              (stash stash-name)
+              (println "Processing remote commit"
+                       remote-sha
+                       (git/ref->commit-message remote-sha))
+              (reset-to-remote-commit remote-sha)
+              (reformat-and-commit-if-dirty remote-sha true)
+              (doseq [sha unpushed-shas]
+                (println "Processing" sha (git/ref->commit-message sha))
+                (checkout sha false)
+                (reformat-and-commit-if-dirty sha false))
+              (when push?
+                (println "Pushing")
+                (push command-line-args))
+              (println "Restoring uncommited state")
+              (checkout local-sha true)
+              (maybe-create-local-formatting-commit)
+              (restore-uncommitted-changes stash-name))))))))
 
 (defn reformat-and-push []
   (reformat {:push? true
