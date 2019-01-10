@@ -44,6 +44,8 @@
 ;;;;            - Think about all the possible args to git push.
 ;;;;              - You're not going to understand everything.
 ;;;;              - Maybe only allow a limited set of args
+*** TODO Bug: Uncommited changes are not restored properly
+**** Some staged changes become unstaged, or is it vice versa?
 *** TODO Are you formatting all files?
 **** Can you format only some?
 ***** Maybe sometimes that's possible
