@@ -2,6 +2,18 @@ TODO Write this README
 
 # Motivation
 
+Include:
+
+- This is (initially at least) aimed at Clojure
+  - Might be easy to adapt to other languages
+- Don't want to argue about formatting
+- Different editors and IDEs have different ideas about formatting
+- Standard format in Git
+  - Explain the required cljfmt setup
+- Individual developers can do what they want
+  - But only with whitespace at the start of a line
+    - But this is enough for Clojure
+
 # Installation
 
 ## Global Setup
