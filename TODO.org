@@ -64,7 +64,15 @@
 ***** Can you restore a stash by name?
 ****** Or find a stash by name and then apply it?
 *** TODO Maybe you can create a commit on a new branch, rather than stashing
-**** And then maybe cherry-pick
+**** Actually, maybe simpler of you can find a stash by name
+**** But with this idea:
+***** So you will always have a commit
+****** Avoids problem with maybe not having a stash
+****** Avoids problem with stash list maybe changing
+***** So you'd reset soft to the commit, I guess
+***** But what about distinguishing between stashed and unstashed
+****** Ah -- maybe could do this with two commits
+***** But then there is housekeeping to do -- tidy these branches
 *** TODO You want to rewrite without changing the commit hashes
 **** I think I saw something that lets you update objects in git
 **** Oh, that's not what you had thought
