@@ -113,8 +113,9 @@
 
 (defn maybe-create-local-formatting-commit []
   (when (git/dirty?)
-    (println "    Committing: apply-local-formatting")
-    (git/commit--quiet--no-verify--allow-empty "apply-local-formatting")))
+    (let [msg "_nomis-restore-local-formatting"]
+     (println "    Committing:" msg)
+     (git/commit--quiet--no-verify--allow-empty msg))))
 
 (defn restore-uncommitted-changes [stash-name]
   (println "    Restoring any uncommitted changes")
