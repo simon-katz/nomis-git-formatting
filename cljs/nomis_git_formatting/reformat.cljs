@@ -1,4 +1,4 @@
-(ns nomis-git-formatting.push-wrapper
+(ns nomis-git-formatting.reformat
   (:require [clojure.string :as str]
             [goog.string :as gstring]
             [goog.string.format]
@@ -144,8 +144,8 @@
     (println "unpushed-shas   =" unpushed-shas)
     (when unpushed-shas
       (let [stash-name (git/safekeeping-stash-name
-                        "_nomis-cljfmt-with-local-formatting--push-wrapper"
-                        "push-wrapper"
+                        "_nomis-cljfmt-with-local-formatting"
+                        "reformat"
                         local-sha)]
         (do
           (stash stash-name)
