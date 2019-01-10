@@ -133,10 +133,15 @@
          local-sha
          remote-sha]      (get-push-details command-line-args)
         branch-name       (git/branch-name)
+        _                 (do
+                            (println "remote-name =" remote-name)
+                            (println "local-sha =" local-sha)
+                            (println "remote-sha =" remote-sha)
+                            (assert (not (nil? local-sha)))
+                            (assert (not (nil? remote-sha))))
         unpushed-shas     (git/range->shas remote-sha local-sha)
         n-unpushed-shas   (count unpushed-shas)]
     (println "unpushed-shas   =" unpushed-shas)
-    (println "local-sha =" local-sha)
     (when unpushed-shas
       (let [stash-name (git/safekeeping-stash-name
                         "_nomis-cljfmt-with-local-formatting--push-wrapper"
