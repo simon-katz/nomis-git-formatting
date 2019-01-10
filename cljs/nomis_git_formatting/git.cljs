@@ -61,11 +61,14 @@
 (defn apply-stash--not-index [] ; TODO Change this to pop when are sure all is OK.
   (u/bash "git stash apply --quiet"))
 
+(defn top-stash-ends-with? [s]
+  (str/ends-with? (top-stash-name)
+                  ;; TODO Note difference between these two things.
+                  ;;      What's the best way to handle it?
+                  s))
+
 (defn apply-stash-if-ends-with--not-index [s]
-  (when (str/ends-with? (top-stash-name)
-                        ;; TODO Note difference between these two things.
-                        ;;      What's the best way to handle it?
-                        s)
+  (when (top-stash-ends-with? s)
     ;; We created a stash; restore things.
     (apply-stash--not-index)))
 
@@ -73,10 +76,7 @@
   (u/bash "git stash apply --quiet --index"))
 
 (defn apply-stash-if-ends-with [s]
-  (when (str/ends-with? (top-stash-name)
-                        ;; TODO Note difference between these two things.
-                        ;;      What's the best way to handle it?
-                        s)
+  (when (top-stash-ends-with? s)
     ;; We created a stash; restore things.
     (apply-stash)))
 

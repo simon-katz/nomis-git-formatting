@@ -5,6 +5,7 @@
 ***** But on push will still have to check all the commits
 *** DONE Bug: Uncommited changes are not restored properly
 **** Some staged changes become unstaged, or is it vice versa?
+*** DONE At start, print the current sha and the stash name
 ** To do
 *** Create a README
 *** Process these notes into documentation
@@ -56,8 +57,14 @@
 ****** whether individual files can be passed to the formatter
 ****** file types
 **** As is done at https://stackoverflow.com/questions/31057527/git-pre-commit-hook-to-format-and-re-add-files-at-the-same-time/49265008#49265008
-*** TODO At start, print the current sha and the stash name
-**** Also create a script file to reset things
+*** TODO Restoring local state if things go wrong
+**** Maybe put the commands in a file
+**** Be careful with the stash stuff
+***** The stash might not exist when the user does this stuff
+***** Can you restore a stash by name?
+****** Or find a stash by name and then apply it?
+*** TODO Maybe you can create a commit on a new branch, rather than stashing
+**** And then maybe cherry-pick
 *** TODO You want to rewrite without changing the commit hashes
 **** I think I saw something that lets you update objects in git
 **** Oh, that's not what you had thought

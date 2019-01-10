@@ -78,6 +78,15 @@
   (println "Stashing if dirty")
   (git/stash-if-dirty-include-untracked stash-name))
 
+(defn print-rescue-instructions [local-sha stash-name]
+  (println "================================")
+  (println "IF ANYTHING GOES WRONG, YOU CAN RECOVER LOCAL STATE WITH:")
+  (println "    git reset --hard" local-sha)
+  (println "    git clean -qfd")
+  (when (git/top-stash-ends-with? stash-name)
+    (println "    git stash apply --index"))
+  (println "================================"))
+
 (defn reset-to-remote-commit [ref]
   (println "    Resetting (hard) to remote commit")
   (git/reset-hard ref))
@@ -153,6 +162,7 @@
             (do
               (println "Stashing")
               (stash stash-name)
+              (print-rescue-instructions local-sha stash-name)
               (println "Processing remote commit"
                        remote-sha
                        (git/ref->commit-message remote-sha))
