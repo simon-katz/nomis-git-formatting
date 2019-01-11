@@ -7,8 +7,9 @@
 **** Some staged changes become unstaged, or is it vice versa?
 *** DONE At start, print the current sha and the stash name
 ** To do
-*** Create a README
-*** Process these notes into documentation
+*** TODO Does it work with a force-push argument?
+*** TODO Create a README
+*** TODO Process these notes into documentation
 ;;;; DONE What happens when we need to force-push?
 ;;;;      The sequence of commits we get will be empty.
 
@@ -47,6 +48,12 @@
 ;;;;            - Think about all the possible args to git push.
 ;;;;              - You're not going to understand everything.
 ;;;;              - Maybe only allow a limited set of args
+*** TODO Are you making any unwarranted assumptions?
+**** eg When you process the commits that are being pushed
+***** You assume that you are on the branch concerned, right?
+****** Because of the way you create commits
+*** TODO You can keep the old commits when there are no foramtting changes
+**** But one commit in a chain having a change will lead to all having a change
 *** TODO Are you formatting all files?
 **** Can you format only some?
 ***** Maybe sometimes that's possible
