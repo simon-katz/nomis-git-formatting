@@ -21,10 +21,13 @@ Include:
 `brew install clojure` # TODO Make this non-Mac-dependent.
 `brew install planck`  # TODO Make this non-Mac-dependent.
 
-Add `<path-to-this-repo>/bin` to your `PATH`.
+Set the environment variable `NOMIS_GIT_FORMATTING_DIR` to this directory, and add the bin directory to your PATH. For example:
 
-ln -s <path-to-this-repo> ~/nomis-git-formatting
+```
+export NOMIS_GIT_FORMATTING_DIR=<path-to-this-directory>
+export PATH="${NOMIS_GIT_FORMATTING_DIR}/bin:${PATH}"
+```
 
 ## Per-Repo Setup
 
-`git config core.hooksPath <path-to-this-repo>/hooks`
+`git config core.hooksPath ${NOMIS_GIT_FORMATTING_DIR}/hooks`

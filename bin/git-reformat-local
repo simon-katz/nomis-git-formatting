@@ -1,5 +1,9 @@
-#!/usr/bin/env bash
-"exec" "plk" "-Sdeps" "{:paths [\"${HOME}/nomis-git-formatting/cljs\"] :deps {com.andrewmcveigh/cljs-time {:mvn/version \"0.5.2\"}}}" "$0" "$@"
+#!/usr/bin/env bash -e
+
+"bash" "-c" "if [ ! -d ${NOMIS_GIT_FORMATTING_DIR} ]; then echo \"NOMIS_GIT_FORMATTING_DIR is not a directory -- exiting\" >&2; exit 1 ; fi"
+"bash" "-c" "if [ ! -f ${NOMIS_GIT_FORMATTING_DIR}/.this-is-the-nomis-git-formatting-dir ]; then echo \"NOMIS_GIT_FORMATTING_DIR does not seem to be pointing at the nomis-git-formatting directory -- exiting\" >&2; exit 1 ; fi"
+
+"exec" "plk" "-Sdeps" "{:paths [\"${NOMIS_GIT_FORMATTING_DIR}/cljs\"] :deps {com.andrewmcveigh/cljs-time {:mvn/version \"0.5.2\"}}}" "$0" "$@"
 
 (ns bash-sript-for-nomis-git-formatting.reformat
   (:require [nomis-git-formatting.reformat :as reformat]))
