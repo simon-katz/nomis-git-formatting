@@ -64,6 +64,7 @@
 ****** whether individual files can be passed to the formatter
 ****** file types
 **** As is done at https://stackoverflow.com/questions/31057527/git-pre-commit-hook-to-format-and-re-add-files-at-the-same-time/49265008#49265008
+**** Use env vars to control things
 *** TODO Restoring local state if things go wrong
 **** Maybe put the commands in a file
 **** Be careful with the stash stuff
@@ -92,3 +93,17 @@
 **** So maybe you have to reformat on commit
 ***** You have both pre-commit and post-commit hooks
 ****** so less jiggery-pokery than you have now
+*** TODO You could cache info about SHAs
+**** In a special file
+**** eg
+***** that a commit has cljfmt formatting
+****** useful when doing a push after having done a `git-local-format`
+***** a mapping from commits to cljfmt-ed commits
+*** TODO Have a single command with sub-commands
+**** eg
+***** nomis-git-cljfmt reformat-local
+***** nomis-git-cljfmt reformat-and-push
+**** or if you parameterise the formatter
+***** eg
+****** nomis-git-format reformat-local
+****** nomis-git-format reformat-and-push
