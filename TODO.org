@@ -54,8 +54,15 @@
 *** To check
 **** TODO Maybe don't format all files
 ***** Can you format only some?
-****** Here's the code
-******* See old repo, commit fa69126
+****** Ah!
+******* You'd have to keep a cumulative collection of reformatted files
+******** As you go through the series of commits
+******* So move this to enhancements
+******* You could copy the reformatted files to a special place
+******** to save on unnecessarily repeatedly reformatting the same file
+****** Old notes
+******* Here's the code
+******** See old repo, commit fa69126
 (defn clojure-ish-file? [s]
   (or (str/ends-with? s ".clj")
       (str/ends-with? s ".cljs")
@@ -68,19 +75,19 @@
                            (str/join " "))]
     (println "The changed Clojure files are:" changed-files)
     (u/bash "lein cljfmt fix" changed-files))
-****** Didn't you see something not working when you used to do this?
-******* Maybe it's only possible in certain circumstances
-******** Oh, I guess the first commit that applies cljfmt formatting needs to do all files
-********* So you need to format all files only for the first commit that you process in each run
-******* Maybe grab the code from the old repo and try again
-****** Is there a possibility here of exceeding the maximum shell command length?
-******* But maybe it's faster, so maybe you want it
-******* If you do it
-******** Detect and maybe report any such error (or just any error)
-********* Do it again but without passing individual files to cljfmt
-******* Ah -- perhaps you can work out what the command line length would be
-******** and compare it with the max allowed
-******** Nope -- doesn't work because env vars are part of ARG_MAX
+******* Didn't you see something not working when you used to do this?
+******** Maybe it's only possible in certain circumstances
+********* Oh, I guess the first commit that applies cljfmt formatting needs to do all files
+********** So you need to format all files only for the first commit that you process in each run
+******** Maybe grab the code from the old repo and try again
+******* Is there a possibility here of exceeding the maximum shell command length?
+******** But maybe it's faster, so maybe you want it
+******** If you do it
+********* Detect and maybe report any such error (or just any error)
+********** Do it again but without passing individual files to cljfmt
+******** Ah -- perhaps you can work out what the command line length would be
+********* and compare it with the max allowed
+********* Nope -- doesn't work because env vars are part of ARG_MAX
 **** TODO Passing args
 ***** TODO Are you passing on command line args correctly?
 ****** (Shells can be weird if you aren't careful)
