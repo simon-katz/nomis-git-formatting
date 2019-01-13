@@ -9,6 +9,9 @@
 ** To do
 *** Documentation
 **** TODO Create a README
+**** TODO Design notes
+***** Possible assumption: Files can be formatted individually
+****** (if you format individual files)
 **** TODO Process these notes into documentation
 ;;;; DONE What happens when we need to force-push?
 ;;;;      The sequence of commits we get will be empty.
@@ -49,11 +52,38 @@
 ;;;;              - You're not going to understand everything.
 ;;;;              - Maybe only allow a limited set of args
 *** To check
-**** TODO Are you formatting all files?
+**** TODO Maybe don't format all files
 ***** Can you format only some?
-****** Maybe sometimes that's possible
-****** Need to think (and create / add to design notes)
+****** Here's the code
+******* See old repo, commit fa69126
+(defn clojure-ish-file? [s]
+  (or (str/ends-with? s ".clj")
+      (str/ends-with? s ".cljs")
+      (str/ends-with? s ".cljx")
+      (str/ends-with? s ".cljc")))
+
+  (let [changed-files (->> (git/changed-files (str user-commit-sha "~2")
+                                              user-commit-sha)
+                           (filter clojure-ish-file?)
+                           (str/join " "))]
+    (println "The changed Clojure files are:" changed-files)
+    (u/bash "lein cljfmt fix" changed-files))
+****** Didn't you see something not working when you used to do this?
+******* Maybe it's only possible in certain circumstances
+******** Oh, I guess the first commit that applies cljfmt formatting needs to do all files
+********* So you need to format all files only for the first commit that you process in each run
+******* Maybe grab the code from the old repo and try again
+****** Is there a possibility here of exceeding the maximum shell command length?
+******* But maybe it's faster, so maybe you want it
+******* If you do it
+******** Detect and maybe report any such error (or just any error)
+********* Do it again but without passing individual files to cljfmt
+******* Ah -- perhaps you can work out what the command line length would be
+******** and compare it with the max allowed
+******** Nope -- doesn't work because env vars are part of ARG_MAX
 **** TODO Passing args
+***** TODO Are you passing on command line args correctly?
+****** (Shells can be weird if you aren't careful)
 ***** TODO Does it work with a force-push argument?
 ***** TODO What args does `git push` take -- you need to understand
 ***** TODO Are you making any unwarranted assumptions?
@@ -62,6 +92,12 @@
 ******** Because of the way you create commits
 *** Fixes
 *** Tidying
+**** TODO Think about possible problems with things going wrong
+***** eg special files being left around
+****** Ah, you have try/catch for these I think
+******* Oh, but still you could have a fatal error and exit
+**** TODO Don't have the file ".git/_nomis-git-formatting--doing-wrapped-push"
+***** Instead, push without running hooks
 **** TODO Restoring local state if things go wrong
 ***** Maybe put the commands in a file
 ***** Be careful with the stash stuff
@@ -98,6 +134,9 @@
 ****** eg
 ******* nomis-git-format reformat-local
 ******* nomis-git-format reformat-and-push
+**** TODO Tidy utils and git code
+***** eg The `bash` command and processing of stdout and stderr
+****** Maybe just some renaming to make things clearer
 *** Enhancements
 **** TODO Parameterise the formatter
 ***** Maybe
