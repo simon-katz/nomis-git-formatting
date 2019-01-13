@@ -138,6 +138,9 @@
 ***** eg The `bash` command and processing of stdout and stderr
 ****** Maybe just some renaming to make things clearer
 *** Enhancements
+**** TODO Perhaps a post-checkout hook
+***** Not to format, but to create a _nomis-LOCAL-FORMATTING-NEEDED file
+****** Optionally; controlled by an env var
 **** TODO Parameterise the formatter
 ***** Maybe
 ****** would need to parameterise these as well:
