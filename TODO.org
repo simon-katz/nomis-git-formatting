@@ -53,14 +53,24 @@
 ;;;;              - Maybe only allow a limited set of args
 *** To check
 **** TODO Passing args
-***** TODO Are you passing on command line args correctly?
-****** (Shells can be weird if you aren't careful)
-***** TODO Does it work with a force-push argument?
-***** TODO What args does `git push` take -- you need to understand
-***** TODO Are you making any unwarranted assumptions?
-****** eg When you process the commits that are being pushed
-******* You assume that you are on the branch concerned, right?
-******** Because of the way you create commits
+***** TODO Specify that this only works for certain special push functionality
+****** It's not a general replacement for `git push`
+****** For now, only allow HEAD to be pushed to the upstream branch that's being tracked
+******* So you need to understand fully what this means
+******** or document your lack of understanding
+****** Allow
+******* Force push
+******* Anything else?
+****** See enhancements for relaxing this limitations
+***** More (older) notes
+****** TODO Are you passing on command line args correctly?
+******* (Shells can be weird if you aren't careful)
+****** TODO Does it work with a force-push argument?
+****** TODO What args does `git push` take -- you need to understand
+****** TODO Are you making any unwarranted assumptions?
+******* eg When you process the commits that are being pushed
+******** You assume that you are on the branch concerned, right?
+********* Because of the way you create commits
 *** Fixes
 *** Tidying
 **** TODO Think about possible problems with things going wrong
@@ -127,6 +137,18 @@
 ****** that a commit has cljfmt formatting
 ******* useful when doing a push after having done a `git-local-format`
 ****** a mapping from commits to cljfmt-ed commits
+**** TODO Command-line arguments
+***** Look at `git push` documentation and decide what to have
+****** Can do it in stages
+****** Understand pushing things other than HEAD
+******* That might be good to allow -- as an enhancement
+******** With limitations
+********* eg ref must be between remote commit and HEAD
+******** If you are not pushing HEAD
+********* You need to look at what commits get reformatted (only what's needed!)
+********* You need to look at resetting local state
+********** I guess that means you will have some commits to bring in
+*********** between pushed-commit and HEAD
 **** TODO Maybe don't format all files
 ***** Can you format only some?
 ****** Ah!
