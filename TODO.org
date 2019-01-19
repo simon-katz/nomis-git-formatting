@@ -7,6 +7,11 @@
 **** Some staged changes become unstaged, or is it vice versa?
 *** DONE At start, print the current sha and the stash name
 ** To do
+*** Try out the latest release of cljfmt
+**** (at https://github.com/weavejester/cljfmt)
+***** First format with old cljfmt
+***** Then with new cljfmt
+****** and compare
 *** Documentation
 **** TODO Create a README
 **** TODO Design notes
