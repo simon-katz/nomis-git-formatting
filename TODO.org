@@ -78,6 +78,9 @@
 ********* Because of the way you create commits
 *** Fixes
 *** Tidying
+**** TODO Is slow startup due to cljs-time?
+***** Largely; 2 s vs 7 s
+***** So do times in a different way
 **** TODO Think about possible problems with things going wrong
 ***** eg special files being left around
 ****** Ah, you have try/catch for these I think
