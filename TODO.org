@@ -78,6 +78,10 @@
 ********* Because of the way you create commits
 *** Fixes
 *** Tidying
+**** TODO Check that core.hooksPath is set up
+***** Otherwise you get a stupid error when you use the reformatting commands
+***** Look up `git config core.hooksPath`
+****** Then look for "../.this-is-the-nomis-git-formatting-dir"
 **** TODO Is slow startup due to cljs-time?
 ***** Largely; 2 s vs 7 s
 ***** So do times in a different way
