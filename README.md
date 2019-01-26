@@ -31,3 +31,15 @@ export PATH="${NOMIS_GIT_FORMATTING_DIR}/bin:${PATH}"
 ## Per-Repo Setup
 
 `git config core.hooksPath ${NOMIS_GIT_FORMATTING_DIR}/hooks`
+
+
+# Usage
+
+Include:
+
+- Push without hooks:
+    git push --no-verify
+
+- Point at nomis-do-to-all-git-repos
+  eg
+    nomis-do-to-all-git-repos -n git config core.hooksPath
