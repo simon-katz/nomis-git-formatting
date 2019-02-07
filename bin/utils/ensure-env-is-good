@@ -1,0 +1,3 @@
+"bash" "-c" "if ! git config core.hooksPath > /dev/null ; then echo \"core.hooksPath not set in Git config -- exiting\" >&2; exit 1 ; fi"
+
+"bash" "-c" "if [[ ! -f \"$(git config core.hooksPath)/../.this-is-the-nomis-git-formatting-dir\" ]] ; then echo \"Git config value for core.hooksPath does not seem to be pointing at the nomis-git-formatting directory -- exiting\" >&2; exit 1 ; fi"
