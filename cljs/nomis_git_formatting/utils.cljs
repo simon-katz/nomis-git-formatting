@@ -1,7 +1,5 @@
 (ns nomis-git-formatting.utils
   (:require [clojure.string :as str]
-            [cljs-time.core :as time]
-            [cljs-time.format :as tf]
             [goog.string :as gstring]
             [goog.string.format]
             [planck.core :as core]
@@ -42,8 +40,14 @@
   (str/split s #" "))
 
 (defn make-timestamp []
-  (tf/unparse (tf/formatter "yyyy-MM-dd--HH-mm-ss")
-              (time/now)))
+  (let [d (js/Date.)]
+    (gstring/format "%04d-%02d-%02d--%02d-%02d-%02d"
+                    (.getFullYear d)
+                    (inc (.getMonth d))
+                    (.getDate d)
+                    (.getHours d)
+                    (.getMinutes d)
+                    (.getSeconds d))))
 
 (defn file-exists? [s]
   (case 2

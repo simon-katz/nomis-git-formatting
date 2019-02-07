@@ -6,7 +6,7 @@
 
 "source" "${NOMIS_GIT_FORMATTING_DIR}/bin/utils/ensure-env-is-good"
 
-"exec" "plk" "-Sdeps" "{:paths [\"${NOMIS_GIT_FORMATTING_DIR}/cljs\"] :deps {com.andrewmcveigh/cljs-time {:mvn/version \"0.5.2\"}}}" "$0" "$@"
+"exec" "plk" "-Sdeps" "{:paths [\"${NOMIS_GIT_FORMATTING_DIR}/cljs\"]}" "$0" "$@"
 
 (ns bash-sript-for-nomis-git-formatting.reformat
   (:require [nomis-git-formatting.reformat :as reformat]))
