@@ -40,6 +40,10 @@ Include:
 - Push without hooks:
     git push --no-verify
 
+- nomis-git-reformat-local
+
+- nomis-git-reformat-and-push
+
 - Point at nomis-do-to-all-git-repos
   eg
     nomis-do-to-all-git-repos -n git config core.hooksPath
