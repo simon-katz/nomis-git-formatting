@@ -6,12 +6,19 @@
 *** DONE Bug: Uncommited changes are not restored properly
 **** Some staged changes become unstaged, or is it vice versa?
 *** DONE At start, print the current sha and the stash name
+*** DONE Check that core.hooksPath is set up
+**** Otherwise you get a stupid error when you use the reformatting commands
+**** Look up `git config core.hooksPath`
+***** Then look for "../.this-is-the-nomis-git-formatting-dir"
+*** DONE Is slow startup due to cljs-time?
+**** Largely; 2 s vs 7 s
+**** So do times in a different way
+*** DONE Try out the latest release of cljfmt
+***** (at https://github.com/weavejester/cljfmt)
+****** First format with old cljfmt
+****** Then with new cljfmt
+******* and compare
 ** To do
-*** Try out the latest release of cljfmt
-**** (at https://github.com/weavejester/cljfmt)
-***** First format with old cljfmt
-***** Then with new cljfmt
-****** and compare
 *** Documentation
 **** TODO Create a README
 **** TODO Design notes
@@ -78,13 +85,6 @@
 ********* Because of the way you create commits
 *** Fixes
 *** Tidying
-**** DONE Check that core.hooksPath is set up
-***** Otherwise you get a stupid error when you use the reformatting commands
-***** Look up `git config core.hooksPath`
-****** Then look for "../.this-is-the-nomis-git-formatting-dir"
-**** DONE Is slow startup due to cljs-time?
-***** Largely; 2 s vs 7 s
-***** So do times in a different way
 **** TODO Think about possible problems with things going wrong
 ***** eg special files being left around
 ****** Ah, you have try/catch for these I think
