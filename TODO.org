@@ -22,6 +22,8 @@
 *** Documentation
 **** TODO Create a README
 **** TODO Design notes
+***** `git config push.default` must be simple
+****** Maybe this is stricter then necessary
 ***** Possible assumption: Files can be formatted individually
 ****** (if you format individual files)
 **** TODO Process these notes into documentation
