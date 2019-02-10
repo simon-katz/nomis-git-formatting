@@ -2,7 +2,11 @@
   (:require [clojure.string :as str]
             [goog.string :as gstring]
             [goog.string.format]
-       [nomis-git-formatting.utils :as u]))
+            [nomis-git-formatting.utils :as u]))
+
+(defn push-default []
+  (-> (u/bash "git config push.default")
+      u/remove-trailing-newline))
 
 (defn branch-name []
   (-> (u/bash "git rev-parse --abbrev-ref HEAD")

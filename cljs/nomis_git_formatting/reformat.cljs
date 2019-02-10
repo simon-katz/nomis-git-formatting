@@ -138,6 +138,12 @@
 
 (defn reformat [{:keys [push?
                         type-for-stash]}]
+  (let [push-default (git/push-default)]
+   (when-not (= push-default "simple")
+     (u/exit-with-error (str "Git push.default is "
+                             push-default
+                             "\nNot sure what to do when Git push.default is not simple.
+Please teach the maintainer more about Git!"))))
   (let [command-line-args cljs.core/*command-line-args*
         _                 (do
                             (println (str "command-line-args = '"
