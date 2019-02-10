@@ -150,17 +150,13 @@
 
 ;;;; ___________________________________________________________________________
 
-(defn run-some-testy-stuff [remote-name-from-command-line
-                            remote-location
-                            push-info]
+(defn run-some-testy-stuff []
   (println "________________________________________")
-  (println (gstring/format "remote-name-from-command-line = \"%s\""
-                           remote-name-from-command-line))
+  (println (gstring/format "push.default = \"%s\""
+                           (push-default)))
   (println "(remote-names) =" (remote-names))
   (println (gstring/format "(remote-name)  = \"%s\""
                            (remote-name)))
-  (println (gstring/format "remote-location = \"%s\"" remote-location))
-  (println (gstring/format "push-info = %s" push-info))
   (println (gstring/format "(->sha \"HEAD\") = \"%s\"" (->sha "HEAD")))
   (println (gstring/format "(range->shas \"HEAD~3\" \"HEAD\") = %s" (range->shas "HEAD~3" "HEAD")))
   (println "(unpushed-commit-shas \"origin\") =" (unpushed-commit-shas "origin"))
@@ -182,6 +178,4 @@
                                                    "the-commit-sha")))
   (println (gstring/format "(current-commit-sha) = \"%s\""
                            (current-commit-sha)))
-  (println (gstring/format "(-> push-info first second) = \"%s\""
-                           (-> push-info first second)))
   (println "________________________________________"))
