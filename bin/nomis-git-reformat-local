@@ -8,6 +8,11 @@
 
 "exec" "plk" "-Sdeps" "{:paths [\"${NOMIS_GIT_FORMATTING_DIR}/cljs\"]}" "$0" "$@"
 
+"______________________________________________________________________________"
+"Above here is Bash code that does nothing when read as Planck/Clojure code."
+"Below here is Planck/Clojure code."
+"______________________________________________________________________________"
+
 (ns bash-sript-for-nomis-git-formatting.reformat
   (:require [nomis-git-formatting.reformat :as reformat]))
 
