@@ -19,6 +19,7 @@ Include:
 ## Global Setup
 
 `brew install clojure` # TODO Make this non-Mac-dependent.
+
 `brew install planck`  # TODO Make this non-Mac-dependent.
 
 Set the environment variable `NOMIS_GIT_FORMATTING_DIR` to this directory, and add the bin directory to your PATH. For example:
@@ -43,7 +44,3 @@ Include:
 - nomis-git-reformat-local
 
 - nomis-git-reformat-and-push
-
-- Point at nomis-do-to-all-git-repos
-  eg
-    nomis-do-to-all-git-repos -n git config core.hooksPath
