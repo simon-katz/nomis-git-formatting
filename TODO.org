@@ -199,3 +199,32 @@
 ******** Ah -- perhaps you can work out what the command line length would be
 ********* and compare it with the max allowed
 ********* Nope -- doesn't work because env vars are part of ARG_MAX
+** Words sent to clojure-uk on Slack
+Following on from yesterday's discussion about indentation and Git commits…
+A while ago I wrote a Git hook in Bash and Planck that allows everyone on a team to use whatever indentation they like.
+If there's interest, I'll look into tidying it up and getting it into a state where other people could use it with some confidence.
+If you think you might find useful, please reply!
+
+Some details:
+• After pulling, you indent the code as you like. (To make things easy for me, I added an Emacs command to re-indent all Clojure and ClojureScript files in a project and create a whitespace-change commit.)
+• When you push, a hook rewrites commits to use the canonical indentation. This is done with cljfmt, using options that only change indentation.
+• Any commits that only change indentation are discarded.
+• After the rewritten commits are pushed, a new local commit is created with your local indentation.
+• It takes care to keep your untracked files, worktree and staged files as they were. (That was pretty fiddly.)
+
+For anyone super-interested, there might be enough information in the README to give it a go. If not, just ask.
+It's at https://github.com/simon-katz/nomis-git-formatting.
+
+I've tested it with:
+- lein-cljfmt 0.6.4
+- Leiningen 2.9.0
+- Git 2.16.1
+- Planck 2.19.0
+- Clojure 1.10.0
+- Bash 3.2.57 (which is really old, but is what comes with macOS; maybe I should upgrade)
+- macOS High Sierra 10.13.6
+* TEMP
+** from README
+- Point at nomis-do-to-all-git-repos
+  eg
+    nomis-do-to-all-git-repos -n git config core.hooksPath
