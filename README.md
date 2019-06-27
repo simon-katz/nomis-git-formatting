@@ -1,5 +1,15 @@
 TODO Finish writing this README.
 
+********************************************************************************
+
+WARNING Just in case there are nasty bugs...
+This code will rewrite commits and push them.
+If you try it out now, do it on a repo that you don't mind trashing!
+(So maybe create a copy of a repo to experiment on.)
+
+********************************************************************************
+
+
 # Motivation
 
 Include:
