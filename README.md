@@ -1,4 +1,4 @@
-TODO Write this README
+TODO Finish writing this README.
 
 # Motivation
 
@@ -18,20 +18,41 @@ Include:
 
 ## Global Setup
 
-`brew install clojure` # TODO Make this non-Mac-dependent.
+### Install Clojure and Planck
 
-`brew install planck`  # TODO Make this non-Mac-dependent.
+Install Clojure and the Clojure CLI tools. See https://clojure.org/guides/getting_started
 
-Set the environment variable `NOMIS_GIT_FORMATTING_DIR` to this directory, and add the bin directory to your PATH. For example:
+Install Planck. See https://github.com/planck-repl/planck
+
+On a Mac, you can do the above with:
 
 ```
-export NOMIS_GIT_FORMATTING_DIR=<path-to-this-directory>
+brew install clojure
+brew install planck
+```
+
+### Set up this Git Repository
+
+Do the following:
+
+- Clone this repo.
+- Set the environment variable `NOMIS_GIT_FORMATTING_DIR` to this repo's directory.
+- Add the bin directory to your PATH.
+
+For example:
+
+```
+export NOMIS_GIT_FORMATTING_DIR=<path-to-this-repo-directory>
 export PATH="${NOMIS_GIT_FORMATTING_DIR}/bin:${PATH}"
 ```
 
-## Per-Repo Setup
+## Per-Repository Setup
 
-`git config core.hooksPath ${NOMIS_GIT_FORMATTING_DIR}/hooks`
+In any Clojure repo that you want to use canonical formatting, do:
+
+```
+git config core.hooksPath ${NOMIS_GIT_FORMATTING_DIR}/hooks
+```
 
 
 # Usage
@@ -39,8 +60,8 @@ export PATH="${NOMIS_GIT_FORMATTING_DIR}/bin:${PATH}"
 Include:
 
 - Push without hooks:
-    git push --no-verify
+    `git push --no-verify`
 
-- nomis-git-reformat-local
+- `nomis-git-reformat-local`
 
-- nomis-git-reformat-and-push
+- `nomis-git-reformat-and-push`
