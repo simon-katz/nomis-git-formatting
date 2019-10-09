@@ -199,23 +199,23 @@
 ******** Ah -- perhaps you can work out what the command line length would be
 ********* and compare it with the max allowed
 ********* Nope -- doesn't work because env vars are part of ARG_MAX
-** Words sent to clojure-uk on Slack
+** Words sent to "clojure" group on Slack ([[https://clojurians.slack.com/archives/C03S1KBA2/p1570641936066300?thread_ts=1570618169.018800&cid=C03S1KBA2][here]])
 A while ago I started work on a Git pre-push hook in Bash and Planck with the idea of allowing everyone in a team to use whatever indentation they like.
 It's probably alpha quality at the moment.
-If there’s interest, I can look into tidying it up and getting it into a state where other people could use it with some confidence.
-If you think you might find useful, or if you think it's wrong-headed, please let me know!
+If there's interest, I can look into tidying it up and getting it into a state where other people could use it with some confidence.
+If you think you might find it useful, or if you think it's wrong-headed, please let me know!
 
 Some details:
 • After pulling, you indent the code as you like. (To make things easy for me, I added an Emacs command to re-indent all Clojure and ClojureScript files in a project and create a whitespace-change commit.)
-• When you push, a hook rewrites commits to use the canonical indentation. This is done with cljfmt, using options that only change indentation. (This could be made more flexible — it doesn’t have to be cljfmt.)
+• When you push, a hook rewrites commits to use the canonical indentation. This is done with cljfmt, using options that only change indentation. (This could be made more flexible — it doesn't have to be cljfmt.)
 • Any commits that only change indentation are discarded.
 • After the rewritten commits are pushed, a new local commit is created with your local indentation.
 • It takes care to keep your untracked files, worktree and staged files as they were. (That was pretty fiddly.)
 
 For anyone super-interested, there might be enough information in the README to give it a go. If not, ask me questions.
-It’s at https://github.com/simon-katz/nomis-git-formatting.
+It's at https://github.com/simon-katz/nomis-git-formatting.
 
-It’s been tested (a while ago) with:
+It's been tested (a while ago) with:
 - lein-cljfmt 0.6.4
 - Leiningen 2.9.0
 - Git 2.16.1
