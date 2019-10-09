@@ -27,6 +27,6 @@ then
     exit 0
 elif [ ! -z "${stdin}" ]
 then
-    >&2 echo 'ERROR: Instead of `git push`, use the `git-push-with-cljfmt-formatting` wrapper script so that cljfmt formatting is applied. See the docs. You may need to run the script when in the root directory of the repo.'
+    >&2 echo 'ERROR: Instead of `git push`, use the `nomis-git-reformat-and-push` wrapper script so that cljfmt formatting is applied. See the docs. You may need to run the script when in the root directory of the repo.'
     exit 1
 fi
